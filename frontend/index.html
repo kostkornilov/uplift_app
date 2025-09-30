@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uplift Маркетинг — Рекомендации</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="container">
+        <section class="panel">
+            <h1>Рекомендации по предложению</h1>
+            <p class="subtitle">Введите характеристики клиента, чтобы подобрать наилучшее маркетинговое предложение.</p>
+
+            <form id="uplift-form" class="form-grid">
+                <label>
+                    Recency (месяцев)
+                    <input type="number" name="recency" min="0" step="0.1" required>
+                </label>
+                <label>
+                    History (₽ за год)
+                    <input type="number" name="history" min="0" step="0.1" required>
+                </label>
+                <label>
+                    Zip code
+                    <input type="text" name="zip_code" placeholder="Suburban" required>
+                </label>
+                <label>
+                    Канал
+                    <select name="channel" required>
+                        <option value="Web">Web</option>
+                        <option value="Phone">Phone</option>
+                        <option value="Multichannel">Multichannel</option>
+                    </select>
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="is_referral">
+                    Клиент пришёл по реферальной программе
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="used_discount">
+                    Использовал скидочные предложения
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" name="used_bogo">
+                    Использовал акции BOGO
+                </label>
+
+                <button type="submit" class="primary">Получить рекомендацию</button>
+            </form>
+        </section>
+
+        <section class="panel" id="result-panel">
+            <h2>Результат</h2>
+            <div id="status" class="status">Введите данные и нажмите «Получить рекомендацию».</div>
+            <div id="result" class="result hidden"></div>
+        </section>
+    </main>
+
+    <template id="result-template">
+        <div class="decision">
+            <span class="label">Лучшее предложение:</span>
+            <span class="value" data-best-offer></span>
+        </div>
+        <div class="metrics">
+            <article>
+                <h3>Discount</h3>
+                <p>Вероятность конверсии c предложением: <span data-discount-treated></span></p>
+                <p>Вероятность конверсии без предложения: <span data-discount-control></span></p>
+                <p>Uplift: <span data-discount-uplift></span></p>
+            </article>
+            <article>
+                <h3>Buy One Get One</h3>
+                <p>Вероятность конверсии c предложением: <span data-bogo-treated></span></p>
+                <p>Вероятность конверсии без предложения: <span data-bogo-control></span></p>
+                <p>Uplift: <span data-bogo-uplift></span></p>
+            </article>
+        </div>
+    </template>
+
+    <script src="script.js"></script>
+</body>
+</html>
