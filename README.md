@@ -1,6 +1,11 @@
 # Описание 
 
-Проект содержит обученные модели для uplift моделирования на датасете https://www.kaggle.com/datasets/davinwijaya/customer-retention. Используется S-learner модель. Репозиторий содержит минимальные бэкенд и фронтенд, которые используют заранее обученные модели для выбора лучшего предложения (Discount или Buy One Get One) либо рекомендации «No Offer».
+Проект содержит обученные модели для uplift моделирования на датасете https://www.kaggle.com/datasets/davinwijaya/customer-retention. Используется S-learner модель. 
+
+![Uplift Marketing Demo](img/frontend.png)
+
+Репозиторий содержит минимальные бэкенд и фронтенд, которые используют заранее обученные модели для выбора лучшего предложения (Discount или Buy One Get One) либо рекомендации «No Offer».
+
 
 ## Структура
 
