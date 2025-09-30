@@ -3,13 +3,13 @@ from __future__ import annotations
 import pickle
 from pathlib import Path
 from typing import Dict, Literal
-
+import joblib
 import numpy as np
 import pandas as pd
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-
+import warnings
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT_DIR / "Data"
@@ -18,6 +18,9 @@ DISCOUNT_MODEL_PATH = DATA_DIR / "s_learner_discount_model.pkl"
 BOGO_MODEL_PATH = DATA_DIR / "s_learner_bogo_model.pkl"
 
 REQUIRED_MODEL_KEYS = {"model"}
+
+warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 class CustomerFeatures(BaseModel):
@@ -30,17 +33,54 @@ class CustomerFeatures(BaseModel):
     used_bogo: bool = Field(..., description="Used buy-one-get-one offers in the past")
 
 
-def _load_pickled_model(path: Path):
-    if not path.exists():
-        raise FileNotFoundError(f"Model file not found: {path}")
+def _load_pickled_model(model_path: Path):
+    """Load pickled model with multiple fallback strategies."""
+    if not model_path.exists():
+        raise FileNotFoundError(f"Model file not found: {model_path}")
+    
+    # Strategy 1: Standard pickle
+    try:
+        with open(model_path, 'rb') as f:
+            model_obj = pickle.load(f)
+        print(f"✓ Loaded {model_path.name} with pickle")
+        return model_obj
+    except Exception as e:
+        print(f"✗ Pickle failed for {model_path.name}: {e}")
+    
+    # Strategy 2: Joblib (often more robust for sklearn models)
+    try:
+        model_obj = joblib.load(model_path)
+        print(f"✓ Loaded {model_path.name} with joblib")
+        return model_obj
+    except Exception as e:
+        print(f"✗ Joblib failed for {model_path.name}: {e}")
+    
+    # Strategy 3: Pickle with different protocols
+    for protocol in [None, 0, 1, 2, 3, 4, 5]:
+        try:
+            with open(model_path, 'rb') as f:
+                if protocol is None:
+                    model_obj = pickle.load(f)
+                else:
+                    # Try loading with specific protocol
+                    f.seek(0)
+                    model_obj = pickle.load(f)
+            print(f"✓ Loaded {model_path.name} with pickle protocol {protocol}")
+            return model_obj
+        except Exception as e:
+            continue
+    
+    # Strategy 4: Try with latin-1 encoding (for Python 2/3 compatibility)
+    try:
+        with open(model_path, 'rb') as f:
+            model_obj = pickle.load(f, encoding='latin-1')
+        print(f"✓ Loaded {model_path.name} with latin-1 encoding")
+        return model_obj
+    except Exception as e:
+        print(f"✗ Latin-1 encoding failed for {model_path.name}: {e}")
+    
+    raise RuntimeError(f"Failed to load model from {model_path} with all strategies")
 
-    with path.open("rb") as f:
-        model_obj = pickle.load(f)
-
-    if isinstance(model_obj, dict) and REQUIRED_MODEL_KEYS.issubset(model_obj.keys()):
-        return model_obj["model"]
-
-    return model_obj
 
 
 def _prepare_base_frame(payload: CustomerFeatures) -> pd.DataFrame:

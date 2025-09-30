@@ -1,56 +1,70 @@
 # Uplift Marketing Demo
 
-В репозитории добавлены минимальные бэкенд и фронтенд, которые используют заранее обученные S-Learner модели для выбора лучшего предложения (Discount или Buy One Get One) либо рекомендации «No Offer».
+Проект содержит минимальные бэкенд и фронтенд, которые используют заранее обученные S-Learner модели для выбора лучшего предложения (Discount или Buy One Get One) либо рекомендации «No Offer».
 
 ## Структура
 
 - `backend/` – FastAPI‑сервис, загружающий готовые модели из папки `Data/` и отдающий прогнозы по эндпоинту `/predict`.
 - `frontend/` – статическая страница, отправляющая запросы к API и отображающая вероятности и uplift по каждому предложению.
 - `Data/` – предоставленные pickle‑файлы моделей `s_learner_discount_model.pkl` и `s_learner_bogo_model.pkl`.
+- `jupyter_code` -- ноутбук с обучением и оценкой моделей
 
 ## Как запустить
 
-1. **Установите зависимости для бэкенда** (понадобится Python ⩾ 3.9):
+### Вариант 1: Conda (рекомендуется для Windows)
+
+1. **Установите зависимости для бэкенда**:
 
    ```powershell
-   cd "c:\Users\Asus\Desktop\У\Applied_ML\backend"
-   python -m venv .venv
-   .\.venv\Scripts\Activate.ps1
-   pip install -r ../requirements.txt
+   cd "c:\Users\Asus\Desktop\У\Applied_ML"
+   conda env create -f environment.yml
+   conda activate applied_ml
    ```
 
-2. **Запустите API** (из папки backend):
+  **Альтернативно**
+  ```powershell
+  conda create -n applied_ml python=3.10 scikit-learn=1.2.2
+  conda activate applied_ml
+  pip install -r requirements.txt
+  ```
+2. **Запустите API**:
 
    ```powershell
+   cd backend
    uvicorn main:app --reload --host 0.0.0.0 --port 8000
    ```
 
-   Эндпоинт `/predict` принимает JSON вида:
 
-   ```json
-   {
-     "recency": 5,
-     "history": 2300,
-     "zip_code": "Suburban",
-     "channel": "Web",
-     "is_referral": true,
-     "used_discount": false,
-     "used_bogo": true
-   }
-   ```
+### API Endpoint
 
-3. **Откройте фронтенд**. Можно запустить любой статический сервер. Например, встроенный из Python:
+Эндпоинт `/predict` принимает JSON вида:
 
-   ```powershell
-   cd "c:\Users\Asus\Desktop\У\Applied_ML\frontend"
-   python -m http.server 5173
-   ```
+```json
+{
+  "recency": 5,
+  "history": 2300,
+  "zip_code": "Suburban",
+  "channel": "Web",
+  "is_referral": true,
+  "used_discount": false,
+  "used_bogo": true
+}
+```
 
-   Затем перейдите на `http://127.0.0.1:5173` в браузере. По умолчанию скрипт обращается к `http://127.0.0.1:8000`. Чтобы сменить адрес, перед подключением скрипта добавьте в `index.html` строку:
+### Запуск фронтенда
 
-   ```html
-   <script>window.API_BASE_URL = "http://ваш-хост:порт";</script>
-   ```
+**Откройте фронтенд**. Можно запустить любой статический сервер. Например, встроенный из Python:
+
+```powershell
+cd "c:\Users\Asus\Desktop\У\Applied_ML\frontend"
+python -m http.server 5173
+```
+
+Затем перейдите на `http://127.0.0.1:5173` в браузере. По умолчанию скрипт обращается к `http://127.0.0.1:8000`. Чтобы сменить адрес, перед подключением скрипта добавьте в `index.html` строку:
+
+```html
+<script>window.API_BASE_URL = "http://ваш-хост:порт";</script>
+```
 
 ## Что делает API
 
@@ -86,7 +100,8 @@
 
 ## Проверка
 
-- [ ] Запуск и ручное тестирование API / фронтенда требуют установленного Python. В текущей среде `python` недоступен, поэтому автоматическая проверка не выполнялась.
+- [x] Conda-подход решает проблемы совместимости scikit-learn 1.2.2 на Windows
+- [ ] Запуск и ручное тестирование API / фронтенда
 
 ## Возможные улучшения
 

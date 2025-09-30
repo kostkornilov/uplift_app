@@ -1,0 +1,15 @@
+name: applied_ml
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - scikit-learn=1.2.2
+  - pandas
+  - numpy
+  - pip
+  - pip:
+    - fastapi
+    - uvicorn[standard]
+    - pydantic
+    - xgboost
