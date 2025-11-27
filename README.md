@@ -74,15 +74,19 @@ python -m http.server 5173
 ### Docker
 
 1. Убедитесь, что установлены [Docker](https://docs.docker.com/get-docker/) и Docker Compose.
-2. Запустите сборку и деплой:
+
+2. Скачайте по [ссылке](https://disk.yandex.ru/d/2pmKeX2mH04Ikw) файлы моделей `s_learner_bogo_model.pkl` и `s_learner_discount_model.pkl`. Положите их в папку `Data\` в основной директории.
+
+3. Запустите сборку и деплой:
 
   ```powershell
   docker compose up --build
   ```
 
   Compose собирает `backend/Dockerfile` и `frontend/Dockerfile`, пробрасывает порты `8000` (API) и `5173` (статический фронтенд), монтирует `Data/` как том (readonly) и следит за `/health`.
-3. Документация FastAPI доступна на `http://127.0.0.1:8000/docs`, фронтенд — на `http://127.0.0.1:5173`.
-4. Если нужно заменить модели, обновите `Data/` на хосте (файлы остаются на томе) и перезапустите контейнер `docker compose restart backend`.
+
+4. Документация FastAPI доступна на `http://127.0.0.1:8000/docs`, фронтенд — на `http://127.0.0.1:5173`.
+
 5. Чтобы остановить и удалить контейнеры:
 
   ```powershell
