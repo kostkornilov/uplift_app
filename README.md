@@ -71,6 +71,30 @@ python -m http.server 5173
 <script>window.API_BASE_URL = "http://ваш-хост:порт";</script>
 ```
 
+### Docker (production-like)
+
+1. Убедитесь, что установлены [Docker](https://docs.docker.com/get-docker/) и Docker Compose (в Docker Desktop уже включён).
+2. Запустите сборку и деплой:
+
+  ```powershell
+  docker compose up --build
+  ```
+
+  Compose собирает `backend/Dockerfile` и `frontend/Dockerfile`, пробрасывает порты `8000` (API) и `5173` (статический фронтенд), монтирует `Data/` как том (readonly) и следит за `/health`.
+3. Документация FastAPI доступна на `http://127.0.0.1:8000/docs`, фронтенд — на `http://127.0.0.1:5173`.
+4. Если нужно заменить модели, обновите `Data/` на хосте (файлы остаются на томе) и перезапустите контейнер `docker compose restart backend`.
+5. Чтобы остановить и удалить контейнеры:
+
+  ```powershell
+  docker compose down
+  ```
+
+### Проверка и конфигурация
+
+- `backend` использует health-check: Compose дождётся, пока `/health` вернёт 200, и только потом запустит `frontend`.
+- Если вам нужен другой адрес API, добавьте в `frontend/index.html` `<script>window.API_BASE_URL = "http://локальный-контейнер:8000";</script>` или разместите аналогичную переменную конфигурации, чтобы браузер направлял запросы в нужный сервис.
+- При необходимости настройте `FASTAPI_PORT` в Compose (переменная пробрасывается в Dockerfile) и пересоберите образ (`docker compose up --build`).
+
 ## Что делает API
 
 1. Загружает сохранённые S-Learner пайплайны (каждый обучен на своём предложении против контрольной группы).

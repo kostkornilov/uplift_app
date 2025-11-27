@@ -175,3 +175,9 @@ def predict_offer(payload: CustomerFeatures):
             "history_log": base_df["history_log"].iloc[0],
         },
     }
+
+
+@app.get("/health")
+def health_check():
+    models_loaded = hasattr(app.state, "discount_model") and hasattr(app.state, "bogo_model")
+    return {"status": "healthy", "models_loaded": models_loaded}
