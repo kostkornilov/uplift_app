@@ -26,12 +26,12 @@
    conda activate applied_ml
    ```
 
-  **Альтернативно**
-  ```powershell
-  conda create -n applied_ml python=3.10 scikit-learn=1.2.2
-  conda activate applied_ml
-  pip install -r requirements.txt
-  ```
+    **Альтернативно**
+    ```powershell
+    conda create -n applied_ml python=3.10 scikit-learn=1.2.2
+    conda activate applied_ml
+    pip install -r requirements.txt
+    ```
 2. **Запустите API**:
 
    ```powershell
@@ -60,16 +60,16 @@
 
 **Откройте фронтенд**. Можно запустить любой статический сервер. Например, встроенный из Python:
 
-```powershell
-cd "c:\Users\Asus\Desktop\У\Applied_ML\frontend"
-python -m http.server 5173
-```
+  ```powershell
+  cd "c:\Users\Asus\Desktop\У\Applied_ML\frontend"
+  python -m http.server 5173
+  ```
 
 Затем перейдите на `http://127.0.0.1:5173` в браузере. По умолчанию скрипт обращается к `http://127.0.0.1:8000`. Чтобы сменить адрес, перед подключением скрипта добавьте в `index.html` строку:
 
-```html
-<script>window.API_BASE_URL = "http://ваш-хост:порт";</script>
-```
+  ```html
+  <script>window.API_BASE_URL = "http://ваш-хост:порт";</script>
+  ```
 
 ### Docker
 
