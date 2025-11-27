@@ -1,0 +1,4 @@
+.pytest_cache/*
+.vscode/*
+Data/
+backend/__pycache__/

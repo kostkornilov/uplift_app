@@ -16,7 +16,7 @@
 
 ## Как запустить
 
-### Вариант 1: Conda (рекомендуется для Windows)
+### Вариант 1: Conda
 
 1. **Установите зависимости для бэкенда**:
 
@@ -71,9 +71,9 @@ python -m http.server 5173
 <script>window.API_BASE_URL = "http://ваш-хост:порт";</script>
 ```
 
-### Docker (production-like)
+### Docker
 
-1. Убедитесь, что установлены [Docker](https://docs.docker.com/get-docker/) и Docker Compose (в Docker Desktop уже включён).
+1. Убедитесь, что установлены [Docker](https://docs.docker.com/get-docker/) и Docker Compose.
 2. Запустите сборку и деплой:
 
   ```powershell
@@ -129,6 +129,4 @@ python -m http.server 5173
 
 ## Возможные улучшения
 
-- Добавить Docker-файл для унифицированного запуска.
 - Вынести список допустимых категориальных значений в конфигурацию и подсвечивать их во фронтенде.
-- Реализовать прогрев моделей и health-check эндпоинт.

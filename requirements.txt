@@ -1,8 +1,8 @@
+numpy==1.26.4
 scikit-learn==1.2.2
 fastapi
 uvicorn[standard]
 pydantic
 pandas
-numpy
 xgboost
 pytest
